@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/users', 'UsersController@index');
+Route::get('api/users', 'Api\UsersController@index');
+Route::get('api/users/{user}', 'Api\UsersController@show');
 
 Route::get('/{any?}', function () {
     return view('app');

@@ -1,7 +1,10 @@
 <template>
     <div class="UserList">
         <h1>Users</h1>
-        <ul>
+        <div v-if="loading">
+            Loading
+        </div>
+        <ul v-else>
             <li v-for="user in users" :key="user.id">
                 <router-link :to="{ name: 'user', params: { id: user.id }}">{{ user.name }}</router-link>
             </li>
@@ -29,9 +32,10 @@ export default {
             this.error = this.users = null
             this.loading = true
             const response = await axios({
-                url: '/users',
+                url: '/api/users',
             })
             this.users = response.data
+            this.loading = false
         }
     }
 }
