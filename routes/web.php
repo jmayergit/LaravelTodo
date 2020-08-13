@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/users', 'UsersController@index');
+
+Route::get('/{any?}', function () {
+    return view('app');
+})->where('any', '.*');
+
+// Route::get('/todos', 'TodosController@index');

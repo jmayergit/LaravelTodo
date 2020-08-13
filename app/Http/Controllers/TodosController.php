@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Todo;
 use Illuminate\Http\Request;
 
 class TodosController extends Controller
@@ -13,17 +14,10 @@ class TodosController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        // filter by user id
+        // $todos = \DB::table('todos')->get(); without eloquent
+        $todos = Todo::all();
+        return view('todos', ['todos' => $todos]);
     }
 
     /**
@@ -34,51 +28,40 @@ class TodosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        Todos::create($this->validateTodo());
+        // return something like 402
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->update($this->validateTodo());
+        // should not change user id
+        // return something like 402
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Todo $todo)
     {
         //
+    }
+
+    protected function validateTodo()
+    {
+        return $request()->validate([
+            'description' => ['required', 'max25'],
+            'user_id' => 'required',
+        ]);
     }
 }
