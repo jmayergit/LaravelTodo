@@ -8,7 +8,21 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <style>
+            body {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: rgb(238 238 238 / 12%);
+            }
 
+            body > * {
+                box-sizing: border-box;
+            }
+
+            input:focus {
+                outline: none; 
+            }
+        </style>
     </head>
     <body>
         <div id="app">

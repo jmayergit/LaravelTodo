@@ -6,11 +6,14 @@
         </div>
         <div v-else>
             {{ user.name }}
+            <Todos v-bind:todos="user.todos"></Todos>
         </div>
     </div>
 </template>
 
 <script>
+import Todos from '../components/Todos.vue'
+
 export default {
     data () {
         return {
@@ -21,6 +24,9 @@ export default {
     },
     created () {
         this.fetchData()
+    },
+    components: {
+        Todos,
     },
     watch: {
         '$route': 'fetchData',
