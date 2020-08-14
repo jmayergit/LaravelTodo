@@ -1950,30 +1950,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       shielded: true,
-      description: this.todo.description
+      description: this.todo.description,
+      preDescription: this.todo.description
     };
   },
   props: {
-    todo: Object
+    todo: Object,
+    remove: Function
+  },
+  computed: {
+    changes: function changes() {
+      return this.description !== this.preDescription;
+    }
   },
   methods: {
     onDblClick: function onDblClick() {
       this.shielded = false;
       this.$refs.input.focus();
     },
-    onSubmit: function () {
-      var _onSubmit = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    onBlur: function onBlur() {
+      if (this.changes) {
+        this.onEnter();
+      } else {
+        this.shielded = true;
+      }
+    },
+    onEsc: function onEsc() {
+      if (this.changes) {
+        this.description = this.preDescription;
+      }
+
+      this.$refs.input.blur();
+    },
+    onEnter: function () {
+      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
+                if (this.changes) {
+                  _context.next = 3;
+                  break;
+                }
+
+                this.$refs.input.blur();
+                return _context.abrupt("return");
+
+              case 3:
+                _context.prev = 3;
+                _context.next = 6;
                 return axios({
                   method: 'put',
                   url: "/api/todos/".concat(this.todo.id),
@@ -1982,34 +2022,80 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 3:
+              case 6:
                 response = _context.sent;
-                this.shielded = true;
-                _context.next = 10;
+                this.preDescription = this.description;
+                this.$refs.input.blur();
+                _context.next = 14;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](3);
 
                 if (_context.t0.response) {
                   console.log(_context.t0.response.data.message);
                 }
 
-              case 10:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 7]]);
+        }, _callee, this, [[3, 11]]);
       }));
 
-      function onSubmit() {
-        return _onSubmit.apply(this, arguments);
+      function onEnter() {
+        return _onEnter.apply(this, arguments);
       }
 
-      return onSubmit;
-    }()
+      return onEnter;
+    }(),
+    onClick: function () {
+      var _onClick = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios({
+                  method: 'delete',
+                  url: "/api/todos/".concat(this.todo.id)
+                });
+
+              case 3:
+                response = _context2.sent;
+                this.$emit('remove', this.todo);
+                _context2.next = 10;
+                break;
+
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+
+                if (_context2.t0.response) {
+                  console.log(_context2.t0.response.data.message);
+                }
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 7]]);
+      }));
+
+      function onClick(_x) {
+        return _onClick.apply(this, arguments);
+      }
+
+      return onClick;
+    }(),
+    preventPropagation: function preventPropagation(e) {
+      e.stopPropagation();
+    }
   }
 });
 
@@ -2062,6 +2148,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2070,7 +2161,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   props: {
-    todos: Array
+    todos: Array,
+    remove: Function
   },
   components: {
     Todo: _Todo_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2278,6 +2370,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2325,6 +2420,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    onRemove: function onRemove(todo) {
+      this.user.todos = this.user.todos.filter(function (e) {
+        return e !== todo;
+      });
     }
   }
 });
@@ -2343,7 +2443,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.Todo[data-v-56644c31] {\n    height: 60px;\n    width: 100%;\n    display: flex;\n}\n.left[data-v-56644c31] {\n    flex-basis: 40px;\n}\n.right[data-v-56644c31] {\n    flex-basis: calc(100% - 40px);\n    position: relative;\n}\n.right > *[data-v-56644c31] {\n    width: 100%;\n    height: 100%;\n}\ninput[data-v-56644c31] {\n    margin: 0;\n    padding: 0;\n    border: none;\n    padding-left: calc(60px - 40px);\n    font-size: inherit;\n    box-sizing: border-box;\n    color: inherit;\n}\ninput.editing[data-v-56644c31] {\n    box-shadow: inset 0px 0px 5px 0px rgba(184,184,184,1);\n}\n.shield[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.shield.editing[data-v-56644c31] {\n    z-index: -1;\n}\n", ""]);
+exports.push([module.i, "\n.Todo[data-v-56644c31] {\n    height: 60px;\n    width: 100%;\n    display: flex;\n}\n.left[data-v-56644c31] {\n    flex-basis: 40px;\n}\n.right[data-v-56644c31] {\n    flex-basis: calc(100% - 40px);\n    position: relative;\n}\n.right > *[data-v-56644c31] {\n    width: 100%;\n    height: 100%;\n}\ninput[data-v-56644c31] {\n    margin: 0;\n    padding: 0;\n    border: none;\n    padding-left: calc(60px - 40px);\n    font-size: inherit;\n    box-sizing: border-box;\n    color: inherit;\n    position: relative;\n}\ninput.editing[data-v-56644c31] {\n    box-shadow: inset 0px 0px 5px 0px rgba(184,184,184,1);\n}\n.shield[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.shield.editing[data-v-56644c31] {\n    z-index: -1;\n}\n.shield .destroy[data-v-56644c31] {\n    visibility: hidden;\n    color: rgba(187, 53, 53, 0.637);\n    cursor: inherit;\n    position: absolute;\n    right: 30px;\n    top: 50%;\n    transform: translateY(-50%);\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.shield:hover .destroy[data-v-56644c31] {\n    visibility: visible;\n}\n.shield .destroy[data-v-56644c31]:hover {\n    color: rgb(187, 53, 53);\n}\n.destroy .screen[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -21449,16 +21549,27 @@ var render = function() {
         class: { editing: !_vm.shielded },
         domProps: { value: _vm.description },
         on: {
-          keyup: function($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-            ) {
-              return null
+          blur: _vm.onBlur,
+          keyup: [
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+              ) {
+                return null
+              }
+              return _vm.onEsc($event)
+            },
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+              ) {
+                return null
+              }
+              return _vm.onEnter($event)
             }
-            return _vm.onSubmit($event)
-          },
-          blur: _vm.onSubmit,
+          ],
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -21468,11 +21579,27 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("div", {
-        staticClass: "shield",
-        class: { editing: !_vm.shielded },
-        on: { dblclick: _vm.onDblClick }
-      })
+      _c(
+        "div",
+        {
+          staticClass: "shield",
+          class: { editing: !_vm.shielded },
+          on: { dblclick: _vm.onDblClick }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "destroy",
+              on: { click: _vm.onClick, dblclick: _vm.preventPropagation }
+            },
+            [
+              _vm._v("\n                ✕\n                "),
+              _c("div", { staticClass: "screen" })
+            ]
+          )
+        ]
+      )
     ])
   ])
 }
@@ -21538,7 +21665,10 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm._l(_vm.todos, function(todo) {
-          return _c("Todo", { key: todo.id, attrs: { todo: todo } })
+          return _c(
+            "Todo",
+            _vm._g({ key: todo.id, attrs: { todo: todo } }, _vm.$listeners)
+          )
         }),
         _vm._v(" "),
         _vm._m(0)
@@ -21677,7 +21807,10 @@ var render = function() {
           "div",
           [
             _vm._v("\n        " + _vm._s(_vm.user.name) + "\n        "),
-            _c("Todos", { attrs: { todos: _vm.user.todos } })
+            _c("Todos", {
+              attrs: { todos: _vm.user.todos },
+              on: { remove: _vm.onRemove }
+            })
           ],
           1
         )

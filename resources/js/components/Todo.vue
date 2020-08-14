@@ -8,14 +8,24 @@
                 v-model="description" 
                 v-bind:class="{ editing: !shielded }" 
                 ref="input"
-                v-on:keyup.enter="onSubmit"
-                v-on:blur="onSubmit"
+                v-on:blur="onBlur"
+                v-on:keyup.esc="onEsc"
+                v-on:keyup.enter="onEnter"
             />
             <div 
                 class="shield" 
                 v-bind:class="{ editing: !shielded }"
                 v-on:dblclick="onDblClick"
-            ></div>
+            >
+                <div
+                    v-on:click="onClick"
+                    v-on:dblclick="preventPropagation"
+                    class="destroy"
+                >
+                    ✕
+                    <div class="screen"></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -25,18 +35,44 @@ export default {
     data () {
         return {
             shielded: true,  
-            description: this.todo.description,  
+            description: this.todo.description,
+            preDescription: this.todo.description,
         }
     },
     props: {
         todo: Object,
+        remove: Function,
+    },
+    computed: {
+        changes: function () {
+            return this.description !== this.preDescription
+        }
     },
     methods: {
         onDblClick: function () {
             this.shielded = false
             this.$refs.input.focus()
         },
-        onSubmit: async function () {
+        onBlur: function () {
+            if (this.changes) {
+                this.onEnter()
+            } else {
+                this.shielded = true
+            }
+        },
+        onEsc: function () {
+            if (this.changes) {
+                this.description = this.preDescription
+            }
+
+            this.$refs.input.blur()
+        },
+        onEnter: async function () {
+            if (!this.changes) {
+                this.$refs.input.blur()
+                return
+            }
+
             try {
                 const response = await axios({
                     method: 'put',
@@ -46,13 +82,31 @@ export default {
                     },
                 })
 
-                this.shielded = true
+                this.preDescription = this.description
+                this.$refs.input.blur()
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)
                 }
             }
-        }
+        },
+        onClick: async function(e) {
+            try {
+                const response = await axios({
+                    method: 'delete',
+                    url: `/api/todos/${this.todo.id}`,
+                })
+
+                this.$emit('remove', this.todo)
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response.data.message)
+                }
+            }
+        },
+        preventPropagation: function(e) {
+            e.stopPropagation()
+        },
     }
 }
 </script>
@@ -86,6 +140,7 @@ input {
     font-size: inherit;
     box-sizing: border-box;
     color: inherit;
+    position: relative;
 }
 
 input.editing {
@@ -100,5 +155,32 @@ input.editing {
 
 .shield.editing {
     z-index: -1;
+}
+
+.shield .destroy {
+    visibility: hidden;
+    color: rgba(187, 53, 53, 0.637);
+    cursor: inherit;
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    user-select: none;
+}
+
+.shield:hover .destroy {
+    visibility: visible;
+}
+
+.shield .destroy:hover {
+    color: rgb(187, 53, 53);
+}
+
+.destroy .screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
 }
 </style>

@@ -6,7 +6,10 @@
         </div>
         <div v-else>
             {{ user.name }}
-            <Todos v-bind:todos="user.todos"></Todos>
+            <Todos 
+                v-bind:todos="user.todos"
+                v-on:remove="onRemove"
+            ></Todos>
         </div>
     </div>
 </template>
@@ -40,7 +43,10 @@ export default {
             })
             this.user = response.data
             this.loading = false
-        }
+        },
+        onRemove: function (todo) {
+            this.user.todos = this.user.todos.filter(e => e !== todo)
+        },
     }
 }
 </script>

@@ -9,7 +9,12 @@
                     placeholder="What needs to be done?"
                 />
             </div>
-            <Todo v-for="todo in todos" v-bind:todo="todo" :key="todo.id"></Todo>
+            <Todo 
+                v-for="todo in todos" 
+                v-bind:todo="todo" 
+                v-on="$listeners"
+                :key="todo.id"
+            ></Todo>
             <footer>
                 <div class="left">
                     item left
@@ -38,6 +43,7 @@ export default {
     },
     props: {
         todos: Array,
+        remove: Function,
     },
     components: {
         Todo,
@@ -68,7 +74,7 @@ export default {
                     console.log(error.response.data.message)
                 }
             }
-        }
+        },
     }
 }
 </script>

@@ -62,7 +62,9 @@ class TodosController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        return response('Success', 200)
+                    ->header('Content-Type', 'text/plain');
     }
 
     protected function validateTodo($request)
