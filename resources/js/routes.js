@@ -9,7 +9,7 @@ export default {
             component: Home,
         },
         {
-            path: '/user/:id',
+            path: '/users/:id',
             component: User,
             name: 'user',
         },

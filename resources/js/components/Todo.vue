@@ -1,3 +1,62 @@
+<template>
+    <div class="Todo">
+        <div class="left">
+
+        </div>
+        <div class="right">
+            <input 
+                v-model="description" 
+                v-bind:class="{ editing: !shielded }" 
+                ref="input"
+                v-on:keyup.enter="onSubmit"
+                v-on:blur="onSubmit"
+            />
+            <div 
+                class="shield" 
+                v-bind:class="{ editing: !shielded }"
+                v-on:dblclick="onDblClick"
+            ></div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    data () {
+        return {
+            shielded: true,  
+            description: this.todo.description,  
+        }
+    },
+    props: {
+        todo: Object,
+    },
+    methods: {
+        onDblClick: function () {
+            this.shielded = false
+            this.$refs.input.focus()
+        },
+        onSubmit: async function () {
+            try {
+                const response = await axios({
+                    method: 'put',
+                    url: `/api/todos/${this.todo.id}`,
+                    data: {
+                        description: this.description,
+                    },
+                })
+
+                this.shielded = true
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response.data.message)
+                }
+            }
+        }
+    }
+}
+</script>
+
 <style scoped>
 .Todo {
     height: 60px;
@@ -43,43 +102,3 @@ input.editing {
     z-index: -1;
 }
 </style>
-
-<template>
-    <div class="Todo">
-        <div class="left">
-
-        </div>
-        <div class="right">
-            <input 
-                v-model="description" 
-                v-bind:class="{ editing: !shielded }" 
-                ref="input"
-            />
-            <div 
-                class="shield" 
-                v-bind:class="{ editing: !shielded }"
-                v-on:dblclick="onDblClick"
-            ></div>
-        </div>
-    </div>
-</template>
-
-<script>
-export default {
-    data () {
-        return {
-            shielded: true,  
-            description: this.todo.description,  
-        }
-    },
-    props: {
-        todo: Object,
-    },
-    methods: {
-        onDblClick: function () {
-            this.shielded = false
-            this.$refs.input.focus()
-        }
-    }
-}
-</script>

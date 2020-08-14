@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Todo;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,7 @@ class TodosController extends Controller
      */
     public function index()
     {
-        // filter by user id
-        // $todos = \DB::table('todos')->get(); without eloquent
-        $todos = Todo::all();
-        return view('todos', ['todos' => $todos]);
+        //
     }
 
     /**
@@ -28,8 +26,19 @@ class TodosController extends Controller
      */
     public function store(Request $request)
     {
-        Todos::create($this->validateTodo());
-        // return something like 402
+        $todo = Todo::create($this->validateTodo($request));
+        return $todo;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Todo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Todo $todo)
+    {
+        //
     }
 
     /**
@@ -41,9 +50,8 @@ class TodosController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        $todo->update($this->validateTodo());
-        // should not change user id
-        // return something like 402
+        $todo->update($this->validateTodo($request));
+        return $todo;
     }
 
     /**
@@ -57,11 +65,17 @@ class TodosController extends Controller
         //
     }
 
-    protected function validateTodo()
+    protected function validateTodo($request)
     {
-        return $request()->validate([
-            'description' => ['required', 'max25'],
-            'user_id' => 'required',
-        ]);
+        if ($request->isMethod('post')) {
+            return $request->validate([
+                'description' => ['required', 'max:25'],
+                'user_id' => 'required',
+            ]);
+        } else {
+            return $request->validate([
+                'description' => ['required', 'max:25'],
+            ]);
+        }
     }
 }

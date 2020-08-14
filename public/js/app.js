@@ -1920,50 +1920,14 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2000,7 +1964,52 @@ __webpack_require__.r(__webpack_exports__);
     onDblClick: function onDblClick() {
       this.shielded = false;
       this.$refs.input.focus();
-    }
+    },
+    onSubmit: function () {
+      var _onSubmit = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return axios({
+                  method: 'put',
+                  url: "/api/todos/".concat(this.todo.id),
+                  data: {
+                    description: this.description
+                  }
+                });
+
+              case 3:
+                response = _context.sent;
+                this.shielded = true;
+                _context.next = 10;
+                break;
+
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context["catch"](0);
+
+                if (_context.t0.response) {
+                  console.log(_context.t0.response.data.message);
+                }
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 7]]);
+      }));
+
+      function onSubmit() {
+        return _onSubmit.apply(this, arguments);
+      }
+
+      return onSubmit;
+    }()
   }
 });
 
@@ -2015,58 +2024,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Todo_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Todo.vue */ "./resources/js/components/Todo.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Todo_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Todo.vue */ "./resources/js/components/Todo.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2098,16 +2064,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      description: ''
+    };
+  },
   props: {
     todos: Array
   },
   components: {
-    Todo: _Todo_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Todo: _Todo_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   computed: {
     empty: function empty() {
       return 0 === this.todos.length;
     }
+  },
+  methods: {
+    onEnter: function () {
+      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!('' === this.description)) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 2:
+                _context.prev = 2;
+                _context.next = 5;
+                return axios({
+                  method: 'post',
+                  url: '/api/todos',
+                  data: {
+                    description: this.description,
+                    user_id: this.$route.params.id
+                  }
+                });
+
+              case 5:
+                response = _context.sent;
+                this.todos.push(response.data);
+                this.description = '';
+                _context.next = 13;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](2);
+
+                if (_context.t0.response) {
+                  console.log(_context.t0.response.data.message);
+                }
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[2, 10]]);
+      }));
+
+      function onEnter() {
+        return _onEnter.apply(this, arguments);
+      }
+
+      return onEnter;
+    }()
   }
 });
 
@@ -21421,6 +21449,16 @@ var render = function() {
         class: { editing: !_vm.shielded },
         domProps: { value: _vm.description },
         on: {
+          keyup: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+            ) {
+              return null
+            }
+            return _vm.onSubmit($event)
+          },
+          blur: _vm.onSubmit,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -21467,27 +21505,49 @@ var render = function() {
       "div",
       { staticClass: "wrapper" },
       [
-        _vm._m(0),
+        _c("div", { staticClass: "header" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.description,
+                expression: "description"
+              }
+            ],
+            attrs: { placeholder: "What needs to be done?" },
+            domProps: { value: _vm.description },
+            on: {
+              keyup: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.onEnter($event)
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.description = $event.target.value
+              }
+            }
+          })
+        ]),
         _vm._v(" "),
         _vm._l(_vm.todos, function(todo) {
           return _c("Todo", { key: todo.id, attrs: { todo: todo } })
         }),
         _vm._v(" "),
-        _vm._m(1)
+        _vm._m(0)
       ],
       2
     )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header" }, [
-      _c("input", { attrs: { placeholder: "What needs to be done?" } })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -37178,7 +37238,7 @@ __webpack_require__.r(__webpack_exports__);
     path: '/',
     component: _views_Home__WEBPACK_IMPORTED_MODULE_0__["default"]
   }, {
-    path: '/user/:id',
+    path: '/users/:id',
     component: _views_User__WEBPACK_IMPORTED_MODULE_1__["default"],
     name: 'user'
   }]
