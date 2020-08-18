@@ -7,7 +7,8 @@
                 v-bind:todos="todos"
                 v-bind:loading="loading"
                 v-on:remove="onRemove"
-                v-on:refresh="fetchData"
+                v-on:toggle="onToggle"
+                v-on:refresh="refresh"
             ></Todos>
         </div>
     </div>
@@ -48,8 +49,23 @@ export default {
             this.user = response.data
             this.loading = false
         },
+        async refresh () {
+            const response = await axios({
+                url: `/api/users/${this.$route.params.id}`,
+            })
+            this.user = response.data
+        },
         onRemove: function (todo) {
             this.user.todos = this.user.todos.filter(e => e !== todo)
+        },
+        onToggle: function (id, toggle) {
+            this.user.todos = this.user.todos.map(todo => {
+                if (id === todo.id) {
+                    return {...todo, completed: toggle}
+                }
+
+                return todo
+            })
         },
     }
 }

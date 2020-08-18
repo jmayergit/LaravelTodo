@@ -2116,7 +2116,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 response = _context3.sent;
-                this.completed = toggled;
+                this.$emit('toggle', this.todo.id);
                 _context3.next = 11;
                 break;
 
@@ -2466,10 +2466,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Todos_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Todos.vue */ "./resources/js/components/Todos.vue");
 
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -2538,9 +2545,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    refresh: function refresh() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios({
+                  url: "/api/users/".concat(_this2.$route.params.id)
+                });
+
+              case 2:
+                response = _context2.sent;
+                _this2.user = response.data;
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
     onRemove: function onRemove(todo) {
       this.user.todos = this.user.todos.filter(function (e) {
         return e !== todo;
+      });
+    },
+    onToggle: function onToggle(id, toggle) {
+      this.user.todos = this.user.todos.map(function (todo) {
+        if (id === todo.id) {
+          return _objectSpread(_objectSpread({}, todo), {}, {
+            completed: toggle
+          });
+        }
+
+        return todo;
       });
     }
   }
@@ -21652,7 +21696,7 @@ var render = function() {
   return _c("div", { staticClass: "Todo" }, [
     _c("div", {
       staticClass: "left",
-      class: { editing: !_vm.shielded, completed: _vm.completed },
+      class: { editing: !_vm.shielded, completed: _vm.todo.completed },
       on: { click: _vm.onToggle }
     }),
     _vm._v(" "),
@@ -21667,7 +21711,7 @@ var render = function() {
           }
         ],
         ref: "input",
-        class: { editing: !_vm.shielded, completed: _vm.completed },
+        class: { editing: !_vm.shielded, completed: _vm.todo.completed },
         domProps: { value: _vm.description },
         on: {
           blur: _vm.onBlur,
@@ -21941,7 +21985,11 @@ var render = function() {
         _vm._v(" "),
         _c("Todos", {
           attrs: { todos: _vm.todos, loading: _vm.loading },
-          on: { remove: _vm.onRemove, refresh: _vm.fetchData }
+          on: {
+            remove: _vm.onRemove,
+            toggle: _vm.onToggle,
+            refresh: _vm.refresh
+          }
         })
       ],
       1

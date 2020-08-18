@@ -2,13 +2,13 @@
     <div class="Todo">
         <div 
             class="left"
-            v-bind:class="{ editing: !shielded, completed }"
+            v-bind:class="{ editing: !shielded, completed: todo.completed }"
             v-on:click="onToggle"
         ></div>
         <div class="right">
             <input 
                 v-model="description" 
-                v-bind:class="{ editing: !shielded, completed }" 
+                v-bind:class="{ editing: !shielded, completed: todo.completed }" 
                 ref="input"
                 v-on:blur="onBlur"
                 v-on:keyup.esc="onEsc"
@@ -48,7 +48,7 @@ export default {
     computed: {
         changes: function () {
             return this.description !== this.preDescription
-        }
+        },
     },
     methods: {
         onDblClick: function () {
@@ -119,7 +119,7 @@ export default {
                     },
                 })
 
-                this.completed = toggled
+                this.$emit('toggle', this.todo.id)
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)
