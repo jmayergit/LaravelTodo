@@ -3,11 +3,21 @@
         <h1>todos</h1>
         <div class="wrapper">
             <div class="header">
+                <button 
+                    v-if="!empty"
+                    v-on:click="updateMultiple"
+                >toggle</button>
                 <input 
                     v-model="description"
                     v-on:keyup.enter="onEnter"
                     placeholder="What needs to be done?"
                 />
+            </div>
+            <div 
+                v-if="loading"
+                class="todoLoder"
+            >
+                loading...
             </div>
             <Todo 
                 v-for="todo in todos" 
@@ -43,7 +53,7 @@ export default {
     },
     props: {
         todos: Array,
-        remove: Function,
+        loading: Boolean,
     },
     components: {
         Todo,
@@ -69,6 +79,32 @@ export default {
 
                 this.todos.push(response.data)
                 this.description = ''
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response.data.message)
+                }
+            }
+        },
+        updateMultiple: async function () {
+            try {
+                let toggle = 0
+                const ids = this.todos.map(todo => {
+                    if (0 === toggle && 0 === todo.completed) {
+                        toggle = 1
+                    }
+                    return todo.id
+                })
+
+                const response = await axios({
+                    method: 'put',
+                    url: `/api/todos/multiple`,
+                    data: {
+                        ids,
+                        toggle,
+                    },
+                })
+
+                this.$emit('refresh')
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)
@@ -131,5 +167,13 @@ footer .middle {
 }
 footer .right {
     flex-basis: 25%;
+}
+
+.todoLoader {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

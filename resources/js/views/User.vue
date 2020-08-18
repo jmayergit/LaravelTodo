@@ -1,14 +1,13 @@
 <template>
     <div class="User">
         <h1>User</h1>
-        <div v-if="loading">
-            Loading...
-        </div>
-        <div v-else>
-            {{ user.name }}
+        <div>
+            <span v-if="user">{{ user.name }}</span>
             <Todos 
-                v-bind:todos="user.todos"
+                v-bind:todos="todos"
+                v-bind:loading="loading"
                 v-on:remove="onRemove"
+                v-on:refresh="fetchData"
             ></Todos>
         </div>
     </div>
@@ -33,6 +32,11 @@ export default {
     },
     watch: {
         '$route': 'fetchData',
+    },
+    computed: {
+        todos: function () {
+            return null === this.user ? [] : this.user.todos
+        },
     },
     methods: {
         async fetchData () {

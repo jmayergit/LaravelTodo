@@ -1960,17 +1960,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       shielded: true,
       description: this.todo.description,
-      preDescription: this.todo.description
+      preDescription: this.todo.description,
+      completed: this.todo.completed
     };
   },
   props: {
-    todo: Object,
-    remove: Function
+    todo: Object
   },
   computed: {
     changes: function changes() {
@@ -2051,8 +2053,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return onEnter;
     }(),
-    onClick: function () {
-      var _onClick = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e) {
+    onRemove: function () {
+      var _onRemove = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e) {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2087,11 +2089,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, this, [[0, 7]]);
       }));
 
-      function onClick(_x) {
-        return _onClick.apply(this, arguments);
+      function onRemove(_x) {
+        return _onRemove.apply(this, arguments);
       }
 
-      return onClick;
+      return onRemove;
+    }(),
+    onToggle: function () {
+      var _onToggle = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(e) {
+        var toggled, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                toggled = this.completed ? 0 : 1;
+                _context3.next = 4;
+                return axios({
+                  method: 'put',
+                  url: "/api/todos/".concat(this.todo.id),
+                  data: {
+                    description: this.description,
+                    completed: toggled
+                  }
+                });
+
+              case 4:
+                response = _context3.sent;
+                this.completed = toggled;
+                _context3.next = 11;
+                break;
+
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+
+                if (_context3.t0.response) {
+                  console.log(_context3.t0.response.data.message);
+                }
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this, [[0, 8]]);
+      }));
+
+      function onToggle(_x2) {
+        return _onToggle.apply(this, arguments);
+      }
+
+      return onToggle;
     }(),
     preventPropagation: function preventPropagation(e) {
       e.stopPropagation();
@@ -2153,6 +2202,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2162,7 +2221,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   props: {
     todos: Array,
-    remove: Function
+    loading: Boolean
   },
   components: {
     Todo: _Todo_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2227,6 +2286,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return onEnter;
+    }(),
+    updateMultiple: function () {
+      var _updateMultiple = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var toggle, ids, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                toggle = 0;
+                ids = this.todos.map(function (todo) {
+                  if (0 === toggle && 0 === todo.completed) {
+                    toggle = 1;
+                  }
+
+                  return todo.id;
+                });
+                _context2.next = 5;
+                return axios({
+                  method: 'put',
+                  url: "/api/todos/multiple",
+                  data: {
+                    ids: ids,
+                    toggle: toggle
+                  }
+                });
+
+              case 5:
+                response = _context2.sent;
+                this.$emit('refresh');
+                _context2.next = 12;
+                break;
+
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](0);
+
+                if (_context2.t0.response) {
+                  console.log(_context2.t0.response.data.message);
+                }
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 9]]);
+      }));
+
+      function updateMultiple() {
+        return _updateMultiple.apply(this, arguments);
+      }
+
+      return updateMultiple;
     }()
   }
 });
@@ -2372,7 +2485,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2390,6 +2502,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     '$route': 'fetchData'
+  },
+  computed: {
+    todos: function todos() {
+      return null === this.user ? [] : this.user.todos;
+    }
   },
   methods: {
     fetchData: function fetchData() {
@@ -2443,7 +2560,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.Todo[data-v-56644c31] {\n    height: 60px;\n    width: 100%;\n    display: flex;\n}\n.left[data-v-56644c31] {\n    flex-basis: 40px;\n}\n.right[data-v-56644c31] {\n    flex-basis: calc(100% - 40px);\n    position: relative;\n}\n.right > *[data-v-56644c31] {\n    width: 100%;\n    height: 100%;\n}\ninput[data-v-56644c31] {\n    margin: 0;\n    padding: 0;\n    border: none;\n    padding-left: calc(60px - 40px);\n    font-size: inherit;\n    box-sizing: border-box;\n    color: inherit;\n    position: relative;\n}\ninput.editing[data-v-56644c31] {\n    box-shadow: inset 0px 0px 5px 0px rgba(184,184,184,1);\n}\n.shield[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.shield.editing[data-v-56644c31] {\n    z-index: -1;\n}\n.shield .destroy[data-v-56644c31] {\n    visibility: hidden;\n    color: rgba(187, 53, 53, 0.637);\n    cursor: inherit;\n    position: absolute;\n    right: 30px;\n    top: 50%;\n    transform: translateY(-50%);\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.shield:hover .destroy[data-v-56644c31] {\n    visibility: visible;\n}\n.shield .destroy[data-v-56644c31]:hover {\n    color: rgb(187, 53, 53);\n}\n.destroy .screen[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.Todo[data-v-56644c31] {\n    height: 60px;\n    width: 100%;\n    display: flex;\n}\n.left[data-v-56644c31] {\n    flex-basis: 40px;\n}\n.right[data-v-56644c31] {\n    flex-basis: calc(100% - 40px);\n    position: relative;\n}\n.right > *[data-v-56644c31] {\n    width: 100%;\n    height: 100%;\n}\ninput[data-v-56644c31] {\n    margin: 0;\n    padding: 0;\n    border: none;\n    padding-left: calc(60px - 40px);\n    font-size: inherit;\n    box-sizing: border-box;\n    color: inherit;\n    position: relative;\n}\ninput.editing[data-v-56644c31] {\n    box-shadow: inset 0px 0px 5px 0px rgba(184,184,184,1);\n}\ninput.completed[data-v-56644c31]:not(.editing) {\n    text-decoration: line-through;\n    color: rgba(0,0,0,.2)\n}\n.shield[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.shield.editing[data-v-56644c31] {\n    z-index: -1;\n}\n.shield .destroy[data-v-56644c31] {\n    visibility: hidden;\n    color: rgba(187, 53, 53, 0.637);\n    cursor: inherit;\n    position: absolute;\n    right: 30px;\n    top: 50%;\n    transform: translateY(-50%);\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.shield:hover .destroy[data-v-56644c31] {\n    visibility: visible;\n}\n.shield .destroy[data-v-56644c31]:hover {\n    color: rgb(187, 53, 53);\n}\n.destroy .screen[data-v-56644c31] {\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 100%;\n}\n.left[data-v-56644c31] {\n    background-size: auto;\n    background-position: center;\n    background-repeat: no-repeat;\n    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');\n}\n.left.completed[data-v-56644c31] {\n    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');\n}\n.left.editing[data-v-56644c31] {\n    background: white;\n}\n", ""]);
 
 // exports
 
@@ -2462,7 +2579,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.Todos[data-v-79d0db12] {\n    max-width: 450px;\n    margin: 0 auto;\n    text-align: center;\n    color: rgba(0,0,0,.5);\n}\n.wrapper[data-v-79d0db12] {\n    box-shadow: 2px 4px 5px 0px rgba(184,184,184,1);\n    background: white;\n    font-size: 1.5rem;\n}\nh1[data-v-79d0db12] {\n    font-size: 100px;\n    color:tomato;\n    margin: 10px 0px;\n    font-weight: lighter;\n}\n.header input[data-v-79d0db12] {\n    height: 60px;\n    padding-left: 60px;\n    width: 100%;\n    border: none;\n    font-weight: lighter;\n    box-sizing: border-box;\n    font-size: inherit;\n}\n.header input[data-v-79d0db12]::-moz-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]:-ms-input-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]::-ms-input-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]::placeholder {\n    color: rgba(0,0,0,.2)\n}\nfooter[data-v-79d0db12] {\n    height: 30px;\n    display: flex;\n    align-items: center;\n    font-size: 1rem;\n}\nfooter .left[data-v-79d0db12] {\n    flex-basis: 25%;\n}\nfooter .middle[data-v-79d0db12] {\n    flex-basis: 50%;\n    display: flex;\n    justify-content: space-around;\n}\nfooter .right[data-v-79d0db12] {\n    flex-basis: 25%;\n}\n", ""]);
+exports.push([module.i, "\n.Todos[data-v-79d0db12] {\n    max-width: 450px;\n    margin: 0 auto;\n    text-align: center;\n    color: rgba(0,0,0,.5);\n}\n.wrapper[data-v-79d0db12] {\n    box-shadow: 2px 4px 5px 0px rgba(184,184,184,1);\n    background: white;\n    font-size: 1.5rem;\n}\nh1[data-v-79d0db12] {\n    font-size: 100px;\n    color:tomato;\n    margin: 10px 0px;\n    font-weight: lighter;\n}\n.header input[data-v-79d0db12] {\n    height: 60px;\n    padding-left: 60px;\n    width: 100%;\n    border: none;\n    font-weight: lighter;\n    box-sizing: border-box;\n    font-size: inherit;\n}\n.header input[data-v-79d0db12]::-moz-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]:-ms-input-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]::-ms-input-placeholder {\n    color: rgba(0,0,0,.2)\n}\n.header input[data-v-79d0db12]::placeholder {\n    color: rgba(0,0,0,.2)\n}\nfooter[data-v-79d0db12] {\n    height: 30px;\n    display: flex;\n    align-items: center;\n    font-size: 1rem;\n}\nfooter .left[data-v-79d0db12] {\n    flex-basis: 25%;\n}\nfooter .middle[data-v-79d0db12] {\n    flex-basis: 50%;\n    display: flex;\n    justify-content: space-around;\n}\nfooter .right[data-v-79d0db12] {\n    flex-basis: 25%;\n}\n.todoLoader[data-v-79d0db12] {\n    height: 60px;\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n", ""]);
 
 // exports
 
@@ -21533,7 +21650,11 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "Todo" }, [
-    _c("div", { staticClass: "left" }),
+    _c("div", {
+      staticClass: "left",
+      class: { editing: !_vm.shielded, completed: _vm.completed },
+      on: { click: _vm.onToggle }
+    }),
     _vm._v(" "),
     _c("div", { staticClass: "right" }, [
       _c("input", {
@@ -21546,7 +21667,7 @@ var render = function() {
           }
         ],
         ref: "input",
-        class: { editing: !_vm.shielded },
+        class: { editing: !_vm.shielded, completed: _vm.completed },
         domProps: { value: _vm.description },
         on: {
           blur: _vm.onBlur,
@@ -21591,7 +21712,7 @@ var render = function() {
             "div",
             {
               staticClass: "destroy",
-              on: { click: _vm.onClick, dblclick: _vm.preventPropagation }
+              on: { click: _vm.onRemove, dblclick: _vm.preventPropagation }
             },
             [
               _vm._v("\n                ✕\n                "),
@@ -21633,6 +21754,12 @@ var render = function() {
       { staticClass: "wrapper" },
       [
         _c("div", { staticClass: "header" }, [
+          !_vm.empty
+            ? _c("button", { on: { click: _vm.updateMultiple } }, [
+                _vm._v("toggle")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _c("input", {
             directives: [
               {
@@ -21663,6 +21790,12 @@ var render = function() {
             }
           })
         ]),
+        _vm._v(" "),
+        _vm.loading
+          ? _c("div", { staticClass: "todoLoder" }, [
+              _vm._v("\n            loading...\n        ")
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _vm._l(_vm.todos, function(todo) {
           return _c(
@@ -21723,7 +21856,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "UserList" }, [
-    _c("h1", [_vm._v("Users")]),
+    _c("h1", [_vm._v("Users Baw")]),
     _vm._v(" "),
     _vm.loading
       ? _c("div", [_vm._v("\n        Loading\n    ")])
@@ -21801,19 +21934,18 @@ var render = function() {
   return _c("div", { staticClass: "User" }, [
     _c("h1", [_vm._v("User")]),
     _vm._v(" "),
-    _vm.loading
-      ? _c("div", [_vm._v("\n        Loading...\n    ")])
-      : _c(
-          "div",
-          [
-            _vm._v("\n        " + _vm._s(_vm.user.name) + "\n        "),
-            _c("Todos", {
-              attrs: { todos: _vm.user.todos },
-              on: { remove: _vm.onRemove }
-            })
-          ],
-          1
-        )
+    _c(
+      "div",
+      [
+        _vm.user ? _c("span", [_vm._v(_vm._s(_vm.user.name))]) : _vm._e(),
+        _vm._v(" "),
+        _c("Todos", {
+          attrs: { todos: _vm.todos, loading: _vm.loading },
+          on: { remove: _vm.onRemove, refresh: _vm.fetchData }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []

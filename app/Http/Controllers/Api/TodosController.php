@@ -27,6 +27,7 @@ class TodosController extends Controller
     public function store(Request $request)
     {
         $todo = Todo::create($this->validateTodo($request));
+        $todo->refresh(); // ::create misses database default
         return $todo;
     }
 
@@ -54,6 +55,16 @@ class TodosController extends Controller
         return $todo;
     }
 
+    public function multiple(Request $request)
+    {
+        $this->validateMultiple($request);
+        $ids = $request->input('ids');
+        $toggle = $request->input('toggle');
+        $todos = Todo::whereIn('id', $ids)->where('completed', '!=', $toggle)->update(['completed' => $toggle]);
+        return response('Success', 200)
+                    ->header('Content-Type', 'text/plain');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -76,8 +87,17 @@ class TodosController extends Controller
             ]);
         } else {
             return $request->validate([
-                'description' => ['required', 'max:25'],
+                'description' => 'max:25',
+                'completed' => 'boolean',
             ]);
         }
+    }
+
+    protected function validateMultiple($request)
+    {
+        return $request->validate([
+            'ids',
+            'completed' => 'boolean',
+        ]);
     }
 }

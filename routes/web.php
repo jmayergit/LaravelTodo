@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/api/users', 'Api\UsersController@index');
 Route::get('/api/users/{user}', 'Api\UsersController@show');
 Route::post('/api/todos', 'Api\TodosController@store');
+Route::put('/api/todos/multiple', 'Api\TodosController@multiple');
 Route::put('/api/todos/{todo}', 'Api\TodosController@update');
 Route::delete('/api/todos/{todo}', 'Api\TodosController@destroy');
 

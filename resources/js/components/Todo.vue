@@ -1,12 +1,14 @@
 <template>
     <div class="Todo">
-        <div class="left">
-
-        </div>
+        <div 
+            class="left"
+            v-bind:class="{ editing: !shielded, completed }"
+            v-on:click="onToggle"
+        ></div>
         <div class="right">
             <input 
                 v-model="description" 
-                v-bind:class="{ editing: !shielded }" 
+                v-bind:class="{ editing: !shielded, completed }" 
                 ref="input"
                 v-on:blur="onBlur"
                 v-on:keyup.esc="onEsc"
@@ -18,7 +20,7 @@
                 v-on:dblclick="onDblClick"
             >
                 <div
-                    v-on:click="onClick"
+                    v-on:click="onRemove"
                     v-on:dblclick="preventPropagation"
                     class="destroy"
                 >
@@ -37,11 +39,11 @@ export default {
             shielded: true,  
             description: this.todo.description,
             preDescription: this.todo.description,
+            completed: this.todo.completed,
         }
     },
     props: {
         todo: Object,
-        remove: Function,
     },
     computed: {
         changes: function () {
@@ -90,7 +92,7 @@ export default {
                 }
             }
         },
-        onClick: async function(e) {
+        onRemove: async function(e) {
             try {
                 const response = await axios({
                     method: 'delete',
@@ -98,6 +100,26 @@ export default {
                 })
 
                 this.$emit('remove', this.todo)
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response.data.message)
+                }
+            }
+        },
+        onToggle: async function(e) {
+            try {
+                const toggled = this.completed ? 0 : 1
+
+                const response = await axios({
+                    method: 'put',
+                    url: `/api/todos/${this.todo.id}`,
+                    data: {
+                        description: this.description,
+                        completed: toggled,
+                    },
+                })
+
+                this.completed = toggled
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)
@@ -147,6 +169,11 @@ input.editing {
     box-shadow: inset 0px 0px 5px 0px rgba(184,184,184,1);
 }
 
+input.completed:not(.editing) {
+    text-decoration: line-through;
+    color: rgba(0,0,0,.2)
+}
+
 .shield {
     position: absolute;
     top: 0;
@@ -182,5 +209,20 @@ input.editing {
     left: 0;
     height: 100%;
     width: 100%;
+}
+
+.left {
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
+}
+
+.left.completed {
+    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
+}
+
+.left.editing {
+    background: white;
 }
 </style>
