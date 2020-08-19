@@ -1,14 +1,23 @@
 <template>
     <div class="UserList">
-        <h1>Users Baw</h1>
+        <h1>Users</h1>
         <div v-if="loading">
             Loading
         </div>
-        <ul v-else>
-            <li v-for="user in users" :key="user.id">
-                <router-link :to="{ name: 'user', params: { id: user.id }}">{{ user.name }}</router-link>
-            </li>
-        </ul>
+        <div v-else class="container">
+            <div 
+                v-for="user in users" 
+                :key="user.id"
+                class="user"
+            >
+                <router-link 
+                    :to="{ name: 'user', params: { id: user.id }}"
+                    class="link"
+                >
+                    <img src="../../../public/account_box.svg" alt="" /> {{ user.name }}
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -40,3 +49,34 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.container {
+    background-color: white;
+    width: 360px;
+    font-size: 1rem;
+    padding: 6px 0px;
+}
+
+.user {
+    background-color: rgb(0 0 0 / 0%);
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.user:hover {
+    cursor: pointer;
+    background-color: rgb(0 0 0 / 4%);
+}
+
+.link {
+    text-decoration: none;
+    color: rgb(0 0 0 / 87%);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.link img {
+    padding-right: 20px;
+}
+</style>

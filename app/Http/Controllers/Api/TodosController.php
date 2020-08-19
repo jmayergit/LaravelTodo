@@ -55,7 +55,7 @@ class TodosController extends Controller
         return $todo;
     }
 
-    public function multiple(Request $request)
+    public function updateMultiple(Request $request)
     {
         $this->validateMultiple($request);
         $ids = $request->input('ids');
@@ -74,6 +74,14 @@ class TodosController extends Controller
     public function destroy(Todo $todo)
     {
         $todo->delete();
+        return response('Success', 200)
+                    ->header('Content-Type', 'text/plain');
+    }
+
+    public function destroyMultiple(Request $request)
+    {
+        $ids = $request->input('ids');
+        Todo::whereIn('id', $ids)->delete();
         return response('Success', 200)
                     ->header('Content-Type', 'text/plain');
     }

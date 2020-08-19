@@ -1,16 +1,13 @@
 <template>
     <div class="User">
-        <h1>User</h1>
-        <div>
-            <span v-if="user">{{ user.name }}</span>
-            <Todos 
-                v-bind:todos="todos"
-                v-bind:loading="loading"
-                v-on:remove="onRemove"
-                v-on:toggle="onToggle"
-                v-on:refresh="refresh"
-            ></Todos>
-        </div>
+        <h1 v-if="user">{{ user.name }}</h1>
+        <Todos 
+            v-bind:todos="todos"
+            v-bind:loading="loading"
+            v-on:remove="onRemove"
+            v-on:toggle="onToggle"
+            v-on:refresh="refresh"
+        ></Todos>
     </div>
 </template>
 
@@ -58,10 +55,10 @@ export default {
         onRemove: function (todo) {
             this.user.todos = this.user.todos.filter(e => e !== todo)
         },
-        onToggle: function (id, toggle) {
+        onToggle: function (id, toggled) {
             this.user.todos = this.user.todos.map(todo => {
                 if (id === todo.id) {
-                    return {...todo, completed: toggle}
+                    return {...todo, completed: toggled}
                 }
 
                 return todo

@@ -39,7 +39,6 @@ export default {
             shielded: true,  
             description: this.todo.description,
             preDescription: this.todo.description,
-            completed: this.todo.completed,
         }
     },
     props: {
@@ -108,7 +107,7 @@ export default {
         },
         onToggle: async function(e) {
             try {
-                const toggled = this.completed ? 0 : 1
+                const toggled = this.todo.completed ? 0 : 1
 
                 const response = await axios({
                     method: 'put',
@@ -119,7 +118,7 @@ export default {
                     },
                 })
 
-                this.$emit('toggle', this.todo.id)
+                this.$emit('toggle', this.todo.id, toggled)
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)
@@ -138,6 +137,11 @@ export default {
     height: 60px;
     width: 100%;
     display: flex;
+    border-top: 1px solid rgba(0,0,0,.2);
+}
+
+.Todo:last-child {
+    border-bottom: 1px solid rgba(0,0,0,.2);
 }
 
 .left {
@@ -171,7 +175,7 @@ input.editing {
 
 input.completed:not(.editing) {
     text-decoration: line-through;
-    color: rgba(0,0,0,.2)
+    color: rgba(0,0,0,.2);
 }
 
 .shield {

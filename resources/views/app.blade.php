@@ -12,10 +12,16 @@
             body {
                 background-color: rgb(238 238 238 / 12%);
                 margin: 0px;
+                font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
 
             body > * {
                 box-sizing: border-box;
+            }
+
+            input {
+                font: inherit;
+                font-weight: 100;
             }
 
             input:focus {
@@ -37,6 +43,10 @@
 
             .home {
                 display: block;
+            }
+
+            button:focus {
+                outline: none;
             }
         </style>
     </head>
