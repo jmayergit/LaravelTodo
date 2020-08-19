@@ -10,9 +10,8 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <style>
             body {
-                max-width: 800px;
-                margin: 0 auto;
                 background-color: rgb(238 238 238 / 12%);
+                margin: 0px;
             }
 
             body > * {
@@ -22,11 +21,37 @@
             input:focus {
                 outline: none; 
             }
+
+            nav {
+                height: 30px;
+                background-color: beige;
+                display: flex;
+                align-items: center;
+                padding: 10px 40px;
+            }
+
+            .view-container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .home {
+                display: block;
+            }
         </style>
     </head>
     <body>
         <div id="app">
-            <router-view></router-view>
+            <nav>
+                <router-link to="/">
+                    <div class="home">
+                        @svg('home.svg', 'home')
+                    </div>
+                </router-link>
+            </nav>
+            <div class="view-container">
+                <router-view></router-view>
+            </div>
         </div>
         <script src="/js/app.js"></script>
     </body>
