@@ -2369,7 +2369,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   url: "/api/todos/multiple",
                   data: {
                     ids: ids,
-                    toggle: toggle
+                    completed: toggle
                   }
                 });
 

@@ -155,7 +155,7 @@ export default {
                     url: `/api/todos/multiple`,
                     data: {
                         ids,
-                        toggle,
+                        completed: toggle,
                     },
                 })
 

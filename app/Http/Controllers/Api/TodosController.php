@@ -59,8 +59,8 @@ class TodosController extends Controller
     {
         $this->validateMultiple($request);
         $ids = $request->input('ids');
-        $toggle = $request->input('toggle');
-        $todos = Todo::whereIn('id', $ids)->where('completed', '!=', $toggle)->update(['completed' => $toggle]);
+        $completed = $request->input('completed');
+        $todos = Todo::whereIn('id', $ids)->where('completed', '!=', $completed)->update(['completed' => $completed]);
         return response('Success', 200)
                     ->header('Content-Type', 'text/plain');
     }
@@ -104,8 +104,8 @@ class TodosController extends Controller
     protected function validateMultiple($request)
     {
         return $request->validate([
-            'ids',
-            'completed' => 'boolean',
+            'ids' => 'required',
+            'completed' => ['required', 'boolean'],
         ]);
     }
 }
