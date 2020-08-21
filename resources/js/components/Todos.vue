@@ -216,6 +216,7 @@ h1 {
 
 .header {
     position: relative;
+    background: rgb(116 116 191 / 1%);
 }
 
 .header .toggleAll {
@@ -234,7 +235,7 @@ header .toggleAll:hover {
 .header input {
     height: 60px;
     margin-left: 60px;
-    width: 100%;
+    width: calc(100% - 60px);
     border: none;
     font-weight: lighter;
     box-sizing: border-box;
