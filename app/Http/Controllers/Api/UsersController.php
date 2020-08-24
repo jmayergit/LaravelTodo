@@ -38,7 +38,9 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        $user->todos;
+        $user->load(['todos' => function ($query) {
+            $query->orderBy('created_at', 'asc');
+        }]);
         return $user;
     }
 
