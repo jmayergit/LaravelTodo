@@ -2357,7 +2357,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.prev = 0;
                 toggle = 0;
                 ids = this.todos.map(function (todo) {
-                  if (0 === toggle && 0 === todo.completed) {
+                  if (0 === toggle && !todo.completed) {
                     toggle = 1;
                   }
 

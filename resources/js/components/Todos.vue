@@ -144,7 +144,7 @@ export default {
             try {
                 let toggle = 0
                 const ids = this.todos.map(todo => {
-                    if (0 === toggle && 0 === todo.completed) {
+                    if (0 === toggle && !todo.completed) {
                         toggle = 1
                     }
                     return todo.id
