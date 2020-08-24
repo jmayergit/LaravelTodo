@@ -66,4 +66,31 @@ class TodosControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testDestroy() 
+    {
+        $todo = factory(\App\Todo::class)->create();
+
+        $response = $this->withHeaders(AJAX_HEADERS)->delete("/api/todos/$todo->id");
+        
+        $response->assertStatus(200);
+
+        $this->assertDeleted($todo); // assertSoftDeleted
+    }
+
+    public function testDestroyMultiple()
+    {
+        $todos = factory(\App\Todo::class, 3)->create();
+
+        $ids = $todos->map(function ($todo) {
+            return $todo->id;
+        });
+        $params = ['ids' => $ids];
+
+        $response = $this->withHeaders(AJAX_HEADERS)->delete('/api/todos/multiple', $params);
+
+        $response->assertStatus(200);
+
+        $this->assertDeleted($todos[0]); // efficient way to assert 3 records deleted ?
+    }
 }
