@@ -12,7 +12,7 @@
                 </div>
                 <input 
                     v-model="description"
-                    v-on:keyup.enter="onEnter"
+                    v-on:keydown.enter="onEnter"
                     placeholder="What needs to be done?"
                 />
             </div>
@@ -119,8 +119,11 @@ export default {
         },
     },
     methods: {
-        onEnter: async function () {
-            if ('' === this.description) return
+        onEnter: async function (event) {
+            if (
+                event.isComposing
+                || '' === this.description
+            ) return
 
             try {
                 const response = await axios({

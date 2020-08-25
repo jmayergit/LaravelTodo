@@ -11,8 +11,8 @@
                 v-bind:class="{ editing: !shielded, completed: todo.completed }" 
                 ref="input"
                 v-on:blur="onBlur"
-                v-on:keyup.esc="onEsc"
-                v-on:keyup.enter="onEnter"
+                v-on:keydown.esc="onEsc"
+                v-on:keydown.enter="onEnter"
             />
             <div 
                 class="shield" 
@@ -61,14 +61,18 @@ export default {
                 this.shielded = true
             }
         },
-        onEsc: function () {
+        onEsc: function (event) {
+            if (event.isComposing) return
+
             if (this.changes) {
                 this.description = this.preDescription
             }
 
             this.$refs.input.blur()
         },
-        onEnter: async function () {
+        onEnter: async function (event) {
+            if (event && event.isComposing) return
+
             if (!this.changes) {
                 this.$refs.input.blur()
                 return
@@ -84,7 +88,10 @@ export default {
                 })
 
                 this.preDescription = this.description
+                if (this.$refs.input.focus)
                 this.$refs.input.blur()
+                this.shielded = true
+                return
             } catch (error) {
                 if (error.response) {
                     console.log(error.response.data.message)

@@ -1990,7 +1990,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.shielded = true;
       }
     },
-    onEsc: function onEsc() {
+    onEsc: function onEsc(event) {
+      if (event.isComposing) return;
+
       if (this.changes) {
         this.description = this.preDescription;
       }
@@ -1998,23 +2000,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.$refs.input.blur();
     },
     onEnter: function () {
-      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                if (!(event && event.isComposing)) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 2:
                 if (this.changes) {
-                  _context.next = 3;
+                  _context.next = 5;
                   break;
                 }
 
                 this.$refs.input.blur();
                 return _context.abrupt("return");
 
-              case 3:
-                _context.prev = 3;
-                _context.next = 6;
+              case 5:
+                _context.prev = 5;
+                _context.next = 8;
                 return axios({
                   method: 'put',
                   url: "/api/todos/".concat(this.todo.id),
@@ -2023,30 +2033,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 6:
+              case 8:
                 response = _context.sent;
                 this.preDescription = this.description;
-                this.$refs.input.blur();
-                _context.next = 14;
-                break;
+                if (this.$refs.input.focus) this.$refs.input.blur();
+                this.shielded = true;
+                return _context.abrupt("return");
 
-              case 11:
-                _context.prev = 11;
-                _context.t0 = _context["catch"](3);
+              case 15:
+                _context.prev = 15;
+                _context.t0 = _context["catch"](5);
 
                 if (_context.t0.response) {
                   console.log(_context.t0.response.data.message);
                 }
 
-              case 14:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[3, 11]]);
+        }, _callee, this, [[5, 15]]);
       }));
 
-      function onEnter() {
+      function onEnter(_x) {
         return _onEnter.apply(this, arguments);
       }
 
@@ -2088,7 +2098,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, this, [[0, 7]]);
       }));
 
-      function onRemove(_x) {
+      function onRemove(_x2) {
         return _onRemove.apply(this, arguments);
       }
 
@@ -2135,7 +2145,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, this, [[0, 8]]);
       }));
 
-      function onToggle(_x2) {
+      function onToggle(_x3) {
         return _onToggle.apply(this, arguments);
       }
 
@@ -2293,13 +2303,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     onEnter: function () {
-      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var _onEnter = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!('' === this.description)) {
+                if (!(event.isComposing || '' === this.description)) {
                   _context.next = 2;
                   break;
                 }
@@ -2341,7 +2351,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, this, [[2, 10]]);
       }));
 
-      function onEnter() {
+      function onEnter(_x) {
         return _onEnter.apply(this, arguments);
       }
 
@@ -21891,7 +21901,7 @@ var render = function() {
         domProps: { value: _vm.description },
         on: {
           blur: _vm.onBlur,
-          keyup: [
+          keydown: [
             function($event) {
               if (
                 !$event.type.indexOf("key") &&
@@ -21991,7 +22001,7 @@ var render = function() {
           attrs: { placeholder: "What needs to be done?" },
           domProps: { value: _vm.description },
           on: {
-            keyup: function($event) {
+            keydown: function($event) {
               if (
                 !$event.type.indexOf("key") &&
                 _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
@@ -37983,8 +37993,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/jmayer/workspace/todo/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/jmayer/workspace/todo/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
